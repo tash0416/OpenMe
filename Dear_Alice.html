@@ -59,22 +59,9 @@
   .no-button:hover {
     background: #222;
   }
-  .bouquet {
-    margin-top: 30px;
-    font-size: 4em;
-    opacity: 0;
-    transition: opacity 0.8s ease-in;
-    color: #b30000;
-    position: relative;
-    z-index: 10;
-  }
-  .show {
-    opacity: 1;
-  }
-  .shame-message {
+  .floating-emoji {
     position: absolute;
     font-weight: bold;
-    color: #990000;
     font-size: 3em;
     user-select: none;
     pointer-events: none;
@@ -95,50 +82,68 @@
 </head>
 <body>
   <h1>Alice Kate Walker,</h1>
-  <p>Will you be my Valentine? <br/><small>(plsplsplsplsplspslsplsplsplsplsplsplsplsplsplsplsplsplsplsplsplsplsplspls)</small></p>
+  <p>Will you be my Valentine? <br/><small>(please say yes!)</small></p>
 
   <div class="buttons">
-    <button onclick="showBouquet('Yea')">Yea</button>
-    <button onclick="showBouquet('Yah')">Yeaaaaa</button>
-    <button onclick="showBouquet('YEAAAAAAAAAA')">YEAAAAAAAAAA</button>
-    <button class="no-button" onclick="showWrong()">no...</button>
+    <button onclick="showHearts('hand')">Yea</button>
+    <button onclick="showHearts('sparkling')">Yeaaaaa</button>
+    <button onclick="showHearts('double')">YEAAAAAAAAAA</button>
+    <button class="no-button" onclick="showShame()">no...</button>
   </div>
 
-  <div id="bouquet" class="bouquet" aria-live="polite"></div>
-
 <script>
-  function showBouquet(answer) {
-    const bouquetDiv = document.getElementById('bouquet');
-    bouquetDiv.innerHTML = `🌹<br><strong>YAAAAYYYYY</strong>`;
-    bouquetDiv.classList.add('show');
-    clearShames();
+  // Clear all floating emojis first
+  function clearEmojis() {
+    document.querySelectorAll('.floating-emoji').forEach(el => el.remove());
   }
-  function showWrong() {
-    const bouquetDiv = document.getElementById('bouquet');
-    bouquetDiv.innerHTML = `<span style="font-size: 1.6em; color: #990000; font-weight: bold;">WRONG ANSWER what the hek?????</span>`;
-    bouquetDiv.classList.add('show');
-    createShameMessages(20);
-  }
-  function createShameMessages(count) {
-    clearShames();
-    for (let i = 0; i < count; i++) {
-      const shame = document.createElement('div');
-      shame.className = 'shame-message';
-      shame.textContent = 'SHAME 🫵🏼';
-      shame.style.left = Math.random() * (window.innerWidth - 150) + 'px';
-      shame.style.top = Math.random() * (window.innerHeight - 50) + 'px';
-      shame.style.animationDelay = (Math.random() * 2) + 's';
-      document.body.appendChild(shame);
 
-      // Trigger reflow and start animation (helps on mobile)
-      void shame.offsetWidth;
-
-      // Remove the message after animation
-      shame.addEventListener('animationend', () => shame.remove());
+  // Show shame messages (multiple SHAME 🫵🏼)
+  function showShame() {
+    clearEmojis();
+    for (let i = 0; i < 20; i++) {
+      createFloatingEmoji('SHAME 🫵🏼');
     }
   }
-  function clearShames() {
-    document.querySelectorAll('.shame-message').forEach(el => el.remove());
+
+  // Show different heart sets depending on answer
+  function showHearts(type) {
+    clearEmojis();
+    let emojis;
+    switch(type) {
+      case 'hand':
+        emojis = ['🤟', '🤘', '✌️', '🫶'];
+        break;
+      case 'sparkling':
+        emojis = ['💖', '✨', '💫', '🌟'];
+        break;
+      case 'double':
+        emojis = ['❤️‍🔥', '💕', '💞', '💓'];
+        break;
+      default:
+        emojis = ['❤️'];
+    }
+    // Create 20 floating emojis randomly picked from the set
+    for (let i = 0; i < 20; i++) {
+      const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+      createFloatingEmoji(emoji);
+    }
+  }
+
+  // Create a floating emoji element and animate it
+  function createFloatingEmoji(content) {
+    const el = document.createElement('div');
+    el.className = 'floating-emoji';
+    el.textContent = content;
+    el.style.left = Math.random() * (window.innerWidth - 50) + 'px';
+    el.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+    el.style.animationDelay = (Math.random() * 2) + 's';
+    document.body.appendChild(el);
+
+    // Trigger reflow for mobile
+    void el.offsetWidth;
+
+    // Remove after animation ends
+    el.addEventListener('animationend', () => el.remove());
   }
 </script>
 </body>
