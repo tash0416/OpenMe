@@ -68,6 +68,23 @@
     animation: floatUp 3s forwards;
     will-change: transform, opacity;
   }
+  .yay-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4em;
+    font-weight: bold;
+    color: #b30000;
+    z-index: 20;
+    user-select: none;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+  }
+  .yay-message.show {
+    opacity: 1;
+  }
   @keyframes floatUp {
     0% {
       opacity: 1;
@@ -91,23 +108,36 @@
     <button class="no-button" onclick="showShame()">no...</button>
   </div>
 
+  <div id="yayMessage" class="yay-message">YAAAAAAY</div>
+
 <script>
-  // Clear all floating emojis first
   function clearEmojis() {
     document.querySelectorAll('.floating-emoji').forEach(el => el.remove());
   }
+  function hideYay() {
+    const yay = document.getElementById('yayMessage');
+    yay.classList.remove('show');
+  }
+  function showYay() {
+    const yay = document.getElementById('yayMessage');
+    yay.classList.add('show');
+    // Hide after 3 seconds
+    setTimeout(() => {
+      yay.classList.remove('show');
+    }, 3000);
+  }
 
-  // Show shame messages (multiple SHAME 🫵🏼)
   function showShame() {
     clearEmojis();
+    hideYay();
     for (let i = 0; i < 20; i++) {
       createFloatingEmoji('SHAME 🫵🏼');
     }
   }
 
-  // Show different heart sets depending on answer
   function showHearts(type) {
     clearEmojis();
+    showYay();
     let emojis;
     switch(type) {
       case 'hand':
@@ -122,14 +152,12 @@
       default:
         emojis = ['❤️'];
     }
-    // Create 20 floating emojis randomly picked from the set
     for (let i = 0; i < 20; i++) {
       const emoji = emojis[Math.floor(Math.random() * emojis.length)];
       createFloatingEmoji(emoji);
     }
   }
 
-  // Create a floating emoji element and animate it
   function createFloatingEmoji(content) {
     const el = document.createElement('div');
     el.className = 'floating-emoji';
@@ -138,11 +166,7 @@
     el.style.top = Math.random() * (window.innerHeight - 50) + 'px';
     el.style.animationDelay = (Math.random() * 2) + 's';
     document.body.appendChild(el);
-
-    // Trigger reflow for mobile
-    void el.offsetWidth;
-
-    // Remove after animation ends
+    void el.offsetWidth; // trigger reflow for animation
     el.addEventListener('animationend', () => el.remove());
   }
 </script>
