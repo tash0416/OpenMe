@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Valentine for Alice Kate Walker</title>
+<style>
+  body {
+    background: #ffe6e6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    padding: 50px;
+    color: #b30000;
+    position: relative;
+    overflow: hidden;
+  }
+  h1 {
+    font-size: 2.5em;
+    margin-bottom: 0.5em;
+    position: relative;
+    z-index: 10;
+  }
+  p {
+    font-size: 1.1em;
+    margin-bottom: 2em;
+    position: relative;
+    z-index: 10;
+  }
+  .buttons button {
+    background: #e60000;
+    border: none;
+    color: white;
+    font-size: 1.1em;
+    padding: 12px 20px;
+    margin: 8px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background 0.3s;
+    position: relative;
+    z-index: 10;
+    touch-action: manipulation;
+  }
+  .buttons button:hover {
+    background: #990000;
+  }
+  .no-button {
+    background: #444;
+    font-size: 8px;
+    padding: 3px 6px;
+    border-radius: 10px;
+    margin-left: 15px;
+    vertical-align: top;
+    cursor: pointer;
+    transition: background 0.3s;
+    position: relative;
+    z-index: 10;
+    touch-action: manipulation;
+  }
+  .no-button:hover {
+    background: #222;
+  }
+  .bouquet {
+    margin-top: 30px;
+    font-size: 4em;
+    opacity: 0;
+    transition: opacity 0.8s ease-in;
+    color: #b30000;
+    position: relative;
+    z-index: 10;
+  }
+  .show {
+    opacity: 1;
+  }
+  .shame-message {
+    position: absolute;
+    font-weight: bold;
+    color: #990000;
+    font-size: 3em;
+    user-select: none;
+    pointer-events: none;
+    animation: floatUp 3s forwards;
+    will-change: transform, opacity;
+  }
+  @keyframes floatUp {
+    0% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-100px);
+    }
+  }
+</style>
+</head>
+<body>
+  <h1>Alice Kate Walker,</h1>
+  <p>Will you be my Valentine? <br/><small>(plsplsplsplsplspslsplsplsplsplsplsplsplsplsplsplsplsplsplsplsplsplsplspls)</small></p>
+
+  <div class="buttons">
+    <button onclick="showBouquet('Yea')">Yea</button>
+    <button onclick="showBouquet('Yah')">Yeaaaaa</button>
+    <button onclick="showBouquet('YEAAAAAAAAAA')">YEAAAAAAAAAA</button>
+    <button class="no-button" onclick="showWrong()">no...</button>
+  </div>
+
+  <div id="bouquet" class="bouquet" aria-live="polite"></div>
+
+<script>
+  function showBouquet(answer) {
+    const bouquetDiv = document.getElementById('bouquet');
+    bouquetDiv.innerHTML = `🌹<br><strong>YAAAAYYYYY</strong>`;
+    bouquetDiv.classList.add('show');
+    clearShames();
+  }
+  function showWrong() {
+    const bouquetDiv = document.getElementById('bouquet');
+    bouquetDiv.innerHTML = `<span style="font-size: 1.6em; color: #990000; font-weight: bold;">WRONG ANSWER what the hek?????</span>`;
+    bouquetDiv.classList.add('show');
+    createShameMessages(20);
+  }
+  function createShameMessages(count) {
+    clearShames();
+    for (let i = 0; i < count; i++) {
+      const shame = document.createElement('div');
+      shame.className = 'shame-message';
+      shame.textContent = 'SHAME 🫵🏼';
+      shame.style.left = Math.random() * (window.innerWidth - 150) + 'px';
+      shame.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+      shame.style.animationDelay = (Math.random() * 2) + 's';
+      document.body.appendChild(shame);
+
+      // Trigger reflow and start animation (helps on mobile)
+      void shame.offsetWidth;
+
+      // Remove the message after animation
+      shame.addEventListener('animationend', () => shame.remove());
+    }
+  }
+  function clearShames() {
+    document.querySelectorAll('.shame-message').forEach(el => el.remove());
+  }
+</script>
+</body>
+</html>
